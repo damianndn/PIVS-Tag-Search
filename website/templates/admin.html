@@ -1,0 +1,38 @@
+{% extends "base.html"%}
+{%block title%}Admin{%endblock%}
+
+{%block content%}
+<form method = "POST">
+    <h3 align="center">User entries administration</h3>
+    <div class="form-group">
+        <label for="email">Search for...</label>
+        <input
+            type="text"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="Wildcards accepted..."
+        />
+    </div>   
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+<table class="table">
+    <tr>
+        {% for heading in headings %}
+        <th scope="col">{{heading}}</th>
+        {% endfor %}
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td>{{user.id}}</td>
+        <td>{{user.email}}</td>
+
+        <td>**************</td>
+
+        <td>{{user.first_name}}</td>
+
+    </tr>
+    {% endfor %}
+    
+</table>
+{%endblock%}

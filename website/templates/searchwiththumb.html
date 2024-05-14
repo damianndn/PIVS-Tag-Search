@@ -1,0 +1,71 @@
+{%extends "base.html"%}
+{%block title%}Search with Thumbnail {%endblock%}
+
+
+{%block content%}
+<script>
+    function confirmAction() {
+        var confirmed = confirm("Are you sure you want to confirm?");
+        if (confirmed === true) {
+            // If user confirms, submit the form
+            document.getElementById("confirmActionInput").value = "confirmed";
+        } 
+        else
+        {
+            document.getElementById("confirmActionInput").value = "cancelled";
+        }
+    }
+</script>
+
+<form method="POST">
+    <h3 align="center">Search</h3>
+    <div class="form-group">
+        <label for="keyword">Search</label>
+        <input
+            type="text"
+            class="form-control"
+            id="keyword"
+            name="keyword"
+            placeholder="Begin search by typing in anything..."
+            autocomplete="off"
+        />
+        <br/>
+        <button type="submit" class="btn btn-primary" name="search" value="search">Search</button>
+    </div>
+</form>
+<div>
+    <p>{{output}}</p>
+</div>
+
+<div class="result">
+    <table class="table">
+        <tr>
+            <th>Results</th>
+        </tr>
+        {% for res in results %}
+            <tr class="clicker">
+                <td>{{ res.name }}</td>
+                <td>
+                    <img class="clicker-arrow" src = "static\icons\clicker-dropdown.png">
+                </td>
+            </tr>
+            <tr class="clicker-content">
+                <td>
+                    <div class="thumb-display-icon-wrapper">
+                        {% for dis in dis_as_list[loop.index-1] %}
+                            <a href="{{ "https://192.168.10.202/pivision/#/Displays/" ~ dis }}" target="_blank">
+                                <img src="static\thumbnails\{{ dis.split('/')[0] }}.jpg" alt='Thumb_{{ dis.split('/')[0] }}' />
+                                <p class="image-description">{{ dis.split('/')[-1] }}</p>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+
+<script src="{{ url_for('static', filename='js/clicker.js') }}"></script>
+{%endblock%}
