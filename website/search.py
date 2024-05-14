@@ -34,21 +34,14 @@ def perform_ntlm_authenticated_request(url, username, password):
     return body
 
 def findFolders(listFolder,out):
-    #out = []
-    #print("def was call for listFolder ID = " + str(listFolder))
     out.append(listFolder)
     username = "administrator"
     password = "77@NguyenQuyDuc"
-    #for i in range(len(listFolder)):
     url = "https://192.168.10.202/pivision/utility/api/v1/folders?folderid="+str(listFolder)
     childfolder_json = json.loads(perform_ntlm_authenticated_request(url,username,password))
     for Id in range(len(childfolder_json["Items"])):
-        #print("loop in "+str(Id))
-        #out.append(childfolder_json["Items"][Id]["Id"])
-        #print(childfolder_json["Items"][Id]["Id"])
         if childfolder_json["Items"][Id]["HasChildren"] == True:
             findFolders(childfolder_json["Items"][Id]["Id"],out)
-    #print("done loop in")
     return None
 
 def findDislays(folderId,display_id):
@@ -123,13 +116,11 @@ async def memify():
     username="administrator"
     password="77@NguyenQuyDuc"
     findFolders(listFolder,out)
-    #print("Exec time lasted %s seconds" %(time.time()-start_time))
 
     display_id = []
     allFolders = out
     findDislays(allFolders,display_id)
     display_id.sort()
-    #print("Exec time lasted %s seconds" %(time.time()-start_time))
     
     
     urls = [f"https://192.168.10.202/pivision/utility/api/v1/displays/{graphic}/export" for graphic in display_id]
@@ -141,9 +132,6 @@ async def memify():
     with ThreadPoolExecutor() as executor:
        for res in executor.map(get_data,urls,[username]*len(urls),[password]*len(urls)):
             dis_to_data_list.append(res)
-
-    #print(len(dis_to_data_list))
-    #print("The act of querying all urls is %s seconds" %{time.time()-start_time})
 
     merged_dict = mergeDictionary(dis_to_data_list)
     inverse = dictInversion(merged_dict)
